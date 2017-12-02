@@ -9,7 +9,7 @@ classdef PlanetNode < Node
         function obj = setPositionAndTime(obj, parameters)
             % Compute position using orbit methods
             obj.t = parameters(1);
-            obj.r = obj.orbit.getPosition(t);
+            obj.r = obj.orbit.toIJK(t);
         end
         
         function dv = computeDeltaV(obj)
