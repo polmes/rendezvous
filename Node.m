@@ -13,7 +13,7 @@ classdef Node < matlab.mixin.Heterogeneous % to allow arrays of mixed classes
         end
         
         function dv = computeDeltaV(obj)
-            dv = obj.vo - obj.vi;
+            dv = norm(obj.vo - obj.vi);
         end
     end
 end
