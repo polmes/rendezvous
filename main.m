@@ -10,11 +10,13 @@ options = optimset('Display', 'off'); % hide output from fsolve
 
 %% INPUT
 
-filename = 'input.mat';
-[nodes, parameters] = util.readInput(filename);
+dataDir = 'data/';
 
-database = 'solarsystem.mat';
-solarSystem = util.readDatabase(database);
+database = 'solarSystem.mat';
+solarSystem = util.readDatabase([dataDir database]);
+
+filename = 'input.mat';
+[nodes, parameters] = util.readInput([dataDir filename], solarSystem);
 
 %% OPTIMIZE DELTA V TOTAL
 
