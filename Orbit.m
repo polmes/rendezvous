@@ -1,9 +1,9 @@
-classdef Orbit
+classdef Orbit < matlab.mixin.Heterogeneous % to allow arrays of mixed classes
     properties
         sma;
         ecc;
         inc;
-        lpe;
+        arg;
         lan;
         mna;
     end
@@ -16,11 +16,11 @@ classdef Orbit
                 node = varargin{1};
                 obj.sma = node.r;
                 % call rv2orbit with node.r and node.vi
-            elseif nargin == 6 % (sma, ecc, inc, lpe, lan, mna)
+            elseif nargin == 6 % (sma, ecc, inc, arg, lan, mna)
                 obj.sma = varargin{1};
                 obj.ecc = varargin{2};
                 obj.inc = varargin{3};
-                obj.lpe = varargin{4};
+                obj.arg = varargin{4};
                 obj.lan = varargin{5};
                 obj.mna = varargin{6};
             else
