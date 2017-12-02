@@ -1,7 +1,7 @@
 function solarSystem = readDatabase(database)
     data = load(database);
     
-    % solarSystem = Orbit.empty(0, size(data, 1));
-    % Will return array of orbits (ordered from Mercury to Pluto)
-    solarSystem = data;
+    % Returns table of planetary data [orbit, mu, radius]
+    % 1: Mercury, 2: Venus, ..., 9:Pluto
+    solarSystem = data.solarSystem;
 end
