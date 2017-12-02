@@ -9,8 +9,11 @@ function orbit = OrbitFactory(varargin)
         arg = varargin{4};
         lan = varargin{5};
         mna = varargin{6};
+        
+        % Singularities
+        [sma, ecc, inc] = util.checkSingularities(sma, ecc, inc);
     else
-        throw(MException('OrbitFactory:WrongNargin', ...
+        throw(MException('OrbitFactory:nargin', ...
             'Invalid number of arguments when using OrbitFactory'));
         % access error stack via MException.last
     end
