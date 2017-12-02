@@ -1,6 +1,8 @@
 classdef PlanetNode < Node
     properties
         orbit;
+        mu;
+        radius;
     end
     
     methods
