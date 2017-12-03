@@ -1,4 +1,4 @@
-function [vo, vi] = lambert(node1, node2)
+function [v1, v2] = lambert(node1, node2)
     % Constants
     mu = 1;
     lw = 0; % Type I (short-way)
@@ -12,5 +12,5 @@ function [vo, vi] = lambert(node1, node2)
     tof = node2.t - node1.t;
     
     % Call the algorithm
-    [vo, vi] = util.Lambert_Izzo_2015_X_HH_RT(r1, r2, tof, mu, lw, mr, lp, tol); % [vo, vi, flag, i, dbg] if we want debug info
+    [v1, v2] = util.Lambert_Izzo_2015_X_HH_RT(r1, r2, tof, mu, lw, mr, lp, tol); % [v1, v2, flag, i, dbg] if we want debug info
 end

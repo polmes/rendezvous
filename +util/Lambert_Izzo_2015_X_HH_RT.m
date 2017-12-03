@@ -1,4 +1,4 @@
-function [ v1, v2, flag, i, dbg ] = Lambert_Izzo_2015_X_HH_RT ( ...
+function [ v1, v2, flag, i ] = Lambert_Izzo_2015_X_HH_RT ( ...
     r1, r2, tof, mu, lw, mr, lp, tol )
 %LAMBERT_IZZO_2015_X_HH_RT Solves the Lambert problem
 %   Algorithm: Dario Izzo (Lancaster-Blanchard) [1]
@@ -31,17 +31,16 @@ function [ v1, v2, flag, i, dbg ] = Lambert_Izzo_2015_X_HH_RT ( ...
 %   v2: initial velocity at arrival point (before the manoeuvre)
 %   flag: function status: 0=OK, 1=BAD_IN, 2=NO_SOL, 3=MAX_IT, 4=PI_FG
 %   i: number of iterations
-%   dbg: debugging data
 %
 % Example:
-%   [v1,v2] = Lambert_Izzo_2015_X_HH_RT([1,0,0],[0,2,0],pi,1,0,2,0,1E-6);
+%   [v1,v2] = Lambert_Izzo_2015_X_HH_RT([1,0,0],[0,2,0],pi,1,0,0,0,1E-6);
 %
 % References:
 %	[1] D. Izzo
 %       Revisiting Lambert's problem
 %       Celest. Mech. Dyn. Astron., vol. 121, no. 1, pp. 1�15, Jan. 2015
 %   [2] https://github.com/esa/pykep
-%   
+%
 %David de la Torre Sangra
 %August 2015
 
@@ -53,7 +52,6 @@ i = 0; % Iterations
 ni = 15; % Maximum number of iterations (Householder iterator)
 v1 = NaN*[0,0,0]; % Preallocate v1
 v2 = NaN*[0,0,0]; % Preallocate v1
-if nargout >= 5, dbg.flag = -1; end % Debug
 
 % Auxiliary magnitudes
 r1n = norm(r1); % Norm of r1
@@ -63,7 +61,6 @@ lws = -(2 * lw - 1); % Long-way sign (lw=-1, ~lw=1)
 % Check if transfer can be computed
 if tof <= 0 || mu <= 0 || r1n == 0 || r2n == 0
     flag = 1; % Status: bad inputs
-    if nargout >= 5, dbg.flag = flag; end
     return;
 end
 
@@ -99,7 +96,6 @@ if mr > 0
     % Check if mr transfer is possible
     if Tmin > t % tof is too low for the required Tmin
         flag = 2; % No solution exists
-        if nargin>5, dbg.flag = flag; end
         return;
     end
     
@@ -124,11 +120,6 @@ end
 % Assign starter value to iterator variable
 x = x0;
 
-% Save debugging data if required
-if nargout >= 5
-    dbg.x0 = x0;
-end
-
 %% Solver
 
 % Householder iterator
@@ -140,14 +131,6 @@ for i=1:ni
     % Compute derivatives
     [ dt, d2t, d3t ] = dtdx ( x, ti, lam2, lam3, lam5 );
 
-    % Save debugging data if required
-    if nargout >= 5
-        dbg.i(i) = i;
-        dbg.x(i) = x;
-        dbg.t(i) = ti / sqrt(2 * mu / (s*s*s));
-        dbg.dt(i) = dt / sqrt(2 * mu / (s*s*s));
-    end
-
     % Householder method
     d = ti - t;
     d2 = d * d;
@@ -158,14 +141,6 @@ for i=1:ni
     % Check convergence
     if abs(term) <= tol, break; end
 
-end
-
-% Save debugging data if required
-if nargout >= 5
-    dbg.i(i+1) = i+1;
-    dbg.x(i+1) = x;
-    dbg.t(i+1) = x2tof ( x, mr, lam, lam2 ) / sqrt(2 * mu / (s*s*s));
-    dbg.dt(i) = dt / sqrt(2 * mu / (s*s*s));
 end
 
 %% Compute velocity vectors for each solution
@@ -199,24 +174,6 @@ vt2n = vt / r2n; % v2
 % Compute velocity vectors
 v1 = vr1n * r1u + vt1n * hxr1u;
 v2 = vr2n * r2u + vt2n * hxr2u;
-
-% Save debugging data if required
-if nargout >= 5
-    dbg.flag = 0; % Status ok
-    dbg.vr1n = vr1n;
-    dbg.vt1n = vt1n;
-    dbg.vr2n = vr2n;
-    dbg.vt2n = vt2n;
-    dbg.sma0 = 1 / (1 - x*x);
-    [sma,ecc,~,nu1] = ICF2KEP(r1,v1,mu);
-    [sma2,ecc2,~,nu2] = ICF2KEP(r2,v2,mu);
-    dbg.sma = sma;
-    dbg.ecc = ecc;
-    dbg.nu1 = nu1;
-    dbg.sma2 = sma2;
-    dbg.ecc2 = ecc2;
-    dbg.nu2 = nu2;
-end
 
 end
 
@@ -320,3 +277,105 @@ end
 
 end
 
+function [ x, tofb, flag ] = Lambert_Izzo_2015_X_Tmin ( ...
+    r1, r2, mu, lw, mr )
+%Lambert_Izzo_2015_X_Tmin Returns minimum tof for a multirev transfer
+%   Algorithm: Dario Izzo (Lancaster-Blanchard) [1]
+%   Parameter: universal variable x
+%
+% Inputs:
+%   r1: position vector of departure point
+%   r2: position vector of arrival point
+%   mu: standard gravitational parameter of the central body
+%   lw: transfer type
+%       0: type I (short-way) transfer
+%       1: type II (long-way) transfer
+%   mr: number of revolutions [0,Inf]
+%
+% Outputs:
+%   x: universal variable value
+%   tofb: minimum time-of-flight value
+%   flag: status flag
+%
+% Example:
+%   [ x, tofb ] = Lambert_Izzo_2015_X_Tmin ( [1,0,0],[0,2,0],1,0,0 )
+%
+% References:
+%	[1] D. Izzo
+%       Revisiting Lambert's problem
+%       Celest. Mech. Dyn. Astron., vol. 121, no. 1, pp. 1�15, Jan. 2015
+%   [2] https://github.com/esa/pykep
+%
+%David de la Torre Sangra
+%July 2015
+
+
+%% Preprocess
+
+% Internal parameters
+flag = 0; % Status
+tol_halley = 1E-9; % Convergence tolerance (Halley iterator)
+itermax_halley = 15; % Maximum number of iterations (Halley iterator)
+x = NaN; tofb = NaN; % Initialize output vars
+
+% Auxiliary magnitudes
+r1n = norm(r1); % Norm of r1
+r2n = norm(r2); % Norm of r2
+lws = -(2 * lw - 1); % Long-way sign (lw=-1, ~lw=1)
+
+% Compute geometrical parameters
+c = norm(r2 - r1); % Length of chord P1_P2
+s = 0.5 * (r1n + r2n + c); % Semiperimeter of triangle P1_P2_F
+lam2 = 1 - c/s; % Battin's Lambda parameter, squared, [1]
+lam = lws * sqrt(lam2); % Lambda parameter, [1]
+lam3 = lam2 * lam; % Powers of Lambda
+lam5 = lam3 * lam2; % Powers of Lambda
+
+%% Initial guess
+
+% Parameters
+% mr = floor(t/pi);
+t00 = acos(lam) + lam * sqrt(1 - lam2); % [1] Eq. 19
+t0m = t00 + mr * pi; % [1] Eq. 19
+
+% Find Tmin for multi-rev case via Halley root solver
+if mr > 0
+    
+    % Starters
+    xold = 0;
+    t = t0m;
+    
+    % Halley iterator
+    for i=1:itermax_halley
+        
+        % Compute derivatives
+        [ dt, d2t, d3t ] = dtdx ( xold, t, lam2, lam3, lam5 );
+        
+        % Compute new x value (Halley method)
+        if dt~=0
+            xnew = xold - dt * d2t / (d2t * d2t - dt * d3t * 0.5);
+        end
+        
+        % Check convergence
+        if abs(xnew - xold) < tol_halley
+            break;
+        elseif i > itermax_halley
+        	flag = 3; % Status: Max iterations exceeded
+        	return;
+        end
+        
+        % Compute TOF
+        Tmin = x2tof ( xnew, mr, lam, lam2 );
+        
+        % Update old x value
+        xold = xnew;
+        
+    end
+
+    % Normalize outputs
+    x = xnew;
+    tofb = Tmin / sqrt(2 * mu / (s*s*s));
+
+end
+
+end
