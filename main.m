@@ -21,7 +21,7 @@ filename = 'input.mat';
 %% OPTIMIZE DELTA V TOTAL
 
 initial = parameters; % store initial guesses
-dV = computeDeltaV(nodes, parameters);
+[dV, ~] = computeDeltaV(nodes, parameters); % [dV, nodes] to get updated array
 
 %% OUTPUT
 
