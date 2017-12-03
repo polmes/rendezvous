@@ -1,6 +1,7 @@
 function [v1, v2] = lambert(node1, node2)
     % Constants
-    mu = 1;
+    global GM;
+    mu = GM;
     lw = 0; % Type I (short-way)
     mr = 0; % number of revolutions (will NOT work if ~= 0)
     lp = 0; % short-period multi-revolution
