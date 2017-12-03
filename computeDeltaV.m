@@ -11,7 +11,7 @@ function dV = computeDeltaV(nodes, parameters)
 
     dv = zeros(1, N-1);
     for i = 1:N
-        dv(i) = nodes(i).computeDeltaV();
+        dv(i) = nodes(i).getDeltaV();
     end
 
     dV = sum(dv);

@@ -12,7 +12,7 @@ classdef PlanetNode < Node
             obj.r = obj.orbit.toIJK(obj.t);
         end
         
-        function dv = computeDeltaV(obj)
+        function dv = getDeltaV(obj)
             % Powered Gravity Assist
             
             % init
