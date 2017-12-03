@@ -2,7 +2,7 @@ function dV = computeDeltaV(nodes, parameters)
     N = length(nodes);
     
     for i = 1:N
-       nodes(i).setPositionAndTime(parameters(i, :));
+       nodes(i) = nodes(i).setPositionAndTime(parameters(i, :));
     end
 
     for i = 1:N-1
