@@ -12,7 +12,7 @@ function [sma, ecc, inc] = checkSingularities(sma, ecc, inc)
         ecc = ecc + 1e-10;
     elseif ecc == 1
         warning('checkSingularities:ecc', 'Singularity: ecc = 1');
-        ecc = ecc + 1e-10;
+        ecc = ecc - 1e-10;
     end
     
     if mod(inc, pi) == 0
