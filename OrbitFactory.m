@@ -1,7 +1,7 @@
 function orbit = OrbitFactory(varargin)
     if nargin == 1 % (node)
         node = varargin{1};
-        [sma, ecc, inc, arg, lan, mna] = util.rvt2orbit(node.r, noode.vo, node.t);
+        [sma, ecc, inc, arg, lan, mna] = util.rvt2orbit(node.r, node.vo, node.t);
     elseif nargin == 6 % (sma, ecc, inc, arg, lan, mna)
         sma = varargin{1};
         ecc = varargin{2};
