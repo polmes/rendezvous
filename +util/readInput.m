@@ -7,7 +7,13 @@ function [nodes, parameters] = readInput(filename, solarSystem)
     % Returns array of Nodes
     % Will mix [Node ... PlanetNode ... Node]
     nodes = Node.empty(0, N);
-    for i = 1:N
+    
+    % First case is special
+    nodes(1) = FirstNode;
+    nodes(1) = nodes(1).setPlanet(solarSystem(input.node(1), :));
+    
+    % The rest
+    for i = 2:N
         if input.node(i) == 0
             nodes(i) = Node;
         else
@@ -15,9 +21,7 @@ function [nodes, parameters] = readInput(filename, solarSystem)
             
             % Populate planetary data
             planet = solarSystem(input.node(i), :);
-            nodes(i).orbit = planet.orbit;
-            nodes(i).mu = planet.mu;
-            nodes(i).radius = planet.radius;
+            nodes(i) = nodes(i).setPlanet(planet);
         end
     end
     
