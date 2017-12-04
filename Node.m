@@ -8,9 +8,9 @@ classdef Node < matlab.mixin.Heterogeneous % to allow arrays of mixed classes
     
     methods
         function obj = setPositionAndTime(obj, parameters)
-            % [rx ry rz t]
-            obj.r = parameters(1:3).'; % [rx; ry; rx]
-            obj.t = parameters(4); % [t]
+            % [t rx ry rz]
+            obj.t = parameters(1); % [t]
+            obj.r = parameters(2:4).'; % [rx; ry; rx]
         end
         
         function dv = getDeltaV(obj)
