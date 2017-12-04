@@ -26,8 +26,8 @@ classdef PlanetNode < Node
             
             % variables
             [~, v_planet] = obj.orbit.toIJK(obj.t);
-            vi_rel = vi - v_planet;
-            vo_rel = vo - v_planet;
+            vi_rel = obj.vi - v_planet;
+            vo_rel = obj.vo - v_planet;
             ai = obj.mu/vi_rel^2;
             ao = obj.mu/vo_rel^2;
             delta = acos(dot(vi_rel, vo_rel) / (norm(vi_rel) * norm(vo_rel)));
