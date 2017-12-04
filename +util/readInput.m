@@ -11,7 +11,6 @@ function [nodes, parameters] = readInput(filename, solarSystem)
     % First
     nodes(1) = FirstNode;
     nodes(1) = nodes(1).setPlanet(solarSystem(input.node(1), :));
-    nodes(1).altitude = input.r(1, 3);
     
     % Mid
     for i = 2:N-1
