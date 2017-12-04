@@ -11,7 +11,8 @@ classdef FirstNode < PlanetNode % it's a special case
             v_pi = sqrt((2 * obj.mu / r_pi) + vo_rel^2);
             v_orbital = sqrt(obj.mu / r_pi);
             
-            dv = abs(v_pi - v_orbital);
+            factor = 1 + (obj.radius/10) / r_pi;
+            dv = abs(v_pi - v_orbital) * factor;
         end
     end
 end
