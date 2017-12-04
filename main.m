@@ -25,4 +25,5 @@ initial = parameters; % store initial guesses
 
 %% OUTPUT
 
-% something something 3D viewer
+disp(['deltaV = ' num2str(dV / 1000) ' km/s']);
+util.showOrbits(nodes);
