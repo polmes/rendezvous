@@ -43,7 +43,7 @@ classdef PlanetNode < Node
             
             % we should not intersect the planeet
             if r_pi < obj.radius
-                dv = dv * 100;
+                dv = dv * 10;
             end
         end
     end
