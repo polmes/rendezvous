@@ -4,6 +4,7 @@ classdef Node < matlab.mixin.Heterogeneous % to allow arrays of mixed classes
         t;
         vi;
         vo;
+        eff;
     end
     
     methods
