@@ -28,18 +28,13 @@ v = norm(v_ijk);
 
 % Calculate angular moment h
 h_vec = cross(r_ijk,v_ijk);
+h = norm(h_vec);
 
 % Calculate eccenticity
 ecc_vec = cross(v_ijk,h_vec)/mu - r_ijk/r;
 ecc = norm(ecc_vec);
-if(ecc == 1)
-    warning('Ecc singualrity (1): substracting Matlab eps value')
-    ecc = ecc - 1e-10; %smallest acceptable number
-end
-if(ecc == 0)
-    warning('Ecc singualrity (0): adding Matlab eps value')
-    ecc = ecc + 1e-10; %smallest acceptable number
-end
+
+
 % Calculate Semi-major axis
 sma = 1/(2/r - v^2/mu);
 
@@ -48,14 +43,10 @@ n_vec = cross([0;0;1],h_vec);
 n = norm(n_vec);
 
 % Calculate the right angle of inc
-inc = acos(h_vec(3)/norm(h_vec));
-if(mod(inc,pi) == 0)
-    warning('Inclination is equal to 0: using Matlab eps value instead')
-    inc = inc + 1e-10; %smallest acceptable number
-end
+inc = acos(h_vec(3)/h);
 
-% Calculate the right angle of agp
-if (n_vec(3)>0)
+% Calculate the right angle of argp
+if (ecc_vec(3)>0)
     argp = acos(dot(n_vec,ecc_vec)/(n*ecc));
 else
     argp = 2*pi - acos(dot(n_vec,ecc_vec)/(n*ecc));
@@ -78,5 +69,24 @@ end
 %Extra parameters usualy not required    
 E = 2*atan(tan(nu/2)/sqrt((1+ecc)/(1-ecc))); % Excentric anomaly
 M = E - ecc*sin(E); % Mean anomaly
+
+%Singularity planar orbit
+if(mod(inc,pi) == 0)
+    warning('Impossible to define AN and DN with planar orbit. Using convention')
+    inc = 0; argp = 0; raan = 0;
+end
+%Singularity no eccentricity
+if(ecc == 0)
+    warning('Impossible to define periapsis with circular orbit. Using convention')
+    argp = 0;
+end
+
+% The following code could be used in the case of a parabolic orbit
+% Nevertheless it seems and unlikely situation given r and v.
+% if(ecc == 1)
+%     warning('Parabolic orbit singularity found. Using alternative expressions')
+%     E = atan(nu/2);
+%     M = E - ecc*sin(E);
+%     sma = h^2/(2*mu); %equal to periapsis by convention
 
 end

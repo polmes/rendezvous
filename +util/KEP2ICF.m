@@ -39,21 +39,23 @@ function [ r_ijk, v_ijk ] = KEP2ICF ( sma, ecc, inc, nu, argp, raan, mu )
 if(ecc > 1 && sma > 0)
     error('Incompatibility found: positive sma with negative ecc')
 end
-if(ecc == 1)
-    warning('Ecc singualrity (1): substracting Matlab eps value')
-    ecc = ecc - 1e-10; %smallest acceptable number
-end
-if(ecc == 0)
-    warning('Ecc singualrity (0): adding Matlab eps value')
-    ecc = ecc + 1e-10; %smallest acceptable number
-end
-if(mod(inc,pi) == 0)
-    warning('Inclination is equal to 0: using Matlab eps value instead')
-    inc = inc + 1e-10; %smallest acceptable number
-end
+% if(ecc == 1)
+%     warning('Ecc singualrity (1): substracting Matlab eps value')
+%     ecc = ecc - 1e-10; %smallest acceptable number
+% end
+% if(ecc == 0)
+%     warning('Ecc singualrity (0): adding Matlab eps value')
+%     ecc = ecc + 1e-10; %smallest acceptable number
+% end
+% if(mod(inc,pi) == 0)
+%     warning('Inclination is equal to 0: using Matlab eps value instead')
+%     inc = inc + 1e-10; %smallest acceptable number
+% end
 
 % Calculate p parameter (semi-latus rectum)
-p = sma * (1 - ecc*ecc); % Ellipse, Hyperbola
+if ecc~=1, p = sma * (1 - ecc*ecc); % Ellipse, Hyperbola
+else, p = sma; % Parabola (arbitrary convention)
+end
 
 % Calculate position (norm)
 r = p / (1 + ecc * cos(nu));
@@ -101,9 +103,5 @@ M(3,3) = Wz;
 % Rotate vectors to ICF (xyz) [1] Eq. 4.50
 r_ijk = M * r_pqw(:);
 v_ijk = M * v_pqw(:);
-
-% Force row-wise output
-v_ijk = v_ijk(:)';
-r_ijk = r_ijk(:)';
 
 end
