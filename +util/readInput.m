@@ -4,8 +4,8 @@ function [nodes, parameters] = readInput(filename, solarSystem)
     input = data.input;
     N = height(input);
     
-    % Returns array of Nodes
-    % Will mix [Node ... PlanetNode ... Node]
+    % Returns array of mixed Nodes
+    % [FirstNode ... Node ... PlanetNode ... Node ... LastNode]
     nodes = Node.empty(0, N);
     
     % First
@@ -24,6 +24,8 @@ function [nodes, parameters] = readInput(filename, solarSystem)
             planet = solarSystem(input.node(i), :);
             nodes(i) = nodes(i).setPlanet(planet);
         end
+        
+        % Add efficiency property for deltaV computation
         nodes(i).eff = input.eff(i);
     end
     
@@ -33,6 +35,6 @@ function [nodes, parameters] = readInput(filename, solarSystem)
     nodes(N).eff = input.eff(N);
     
     % Returns matrix of parameters [rx ry rz t]
-    % [rx ry rz] will be Nan for PlanetNodes
+    % [rx ry rz] will be NaN for PlanetNodes
     parameters = table2array(input(:, 1:2));
 end

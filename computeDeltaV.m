@@ -5,8 +5,11 @@ function [dV, nodes] = computeDeltaV(nodes, parameters)
        nodes(i) = nodes(i).setPositionAndTime(parameters(i, :));
     end
     
+    % First
     [~, v_planet] = nodes(1).orbit.toIJK(nodes(1).t);
     nodes(1).vi = v_planet;
+    
+    % Rest
     for i = 1:N-1
         [nodes(i).vo, nodes(i+1).vi] = lambert(nodes(i), nodes(i+1));   
     end
