@@ -6,7 +6,7 @@ function showOrbits(nodes)
     hold('on');
     
     % Sun
-    scatter3(0, 0, 0, '*');
+    scatter3(0, 0, 0, 'k*');
     
     for i = 1:N
         r = nodes(i).r;
