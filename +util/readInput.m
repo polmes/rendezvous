@@ -11,6 +11,7 @@ function [nodes, parameters] = readInput(filename, solarSystem)
     % First
     nodes(1) = FirstNode;
     nodes(1) = nodes(1).setPlanet(solarSystem(input.node(1), :));
+    nodes(1).eff = input.eff(1);
     
     % Mid
     for i = 2:N-1
@@ -23,11 +24,13 @@ function [nodes, parameters] = readInput(filename, solarSystem)
             planet = solarSystem(input.node(i), :);
             nodes(i) = nodes(i).setPlanet(planet);
         end
+        nodes(i).eff = input.eff(i);
     end
     
     % Last
     nodes(N) = LastNode;
     nodes(N) = nodes(N).setPlanet(solarSystem(input.node(N), :));
+    nodes(N).eff = input.eff(N);
     
     % Returns matrix of parameters [rx ry rz t]
     % [rx ry rz] will be Nan for PlanetNodes
