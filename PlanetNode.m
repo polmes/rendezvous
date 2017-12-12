@@ -43,6 +43,7 @@ classdef PlanetNode < Node
             
             % we should not intersect the planeet
             if r_pi < obj.radius
+                warning('PlanetNode:getDeltaV:intersection', 'Oops... we crashed with a planet!');
                 dv = dv * 10;
             end
         end
