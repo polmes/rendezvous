@@ -2,7 +2,7 @@ function [dV, nodes, parameters, grad, it] = optimize(nodes, parameters)
     % Tolerance
     pardif = ones(size(parameters)) * 1;
     dl = 10000000;
-    epsi = 0.0005;
+    epsi = 0.0001;
     
     % Ignore NaN
     nrm = @(x) norm(x(~isnan(x)));
@@ -40,5 +40,9 @@ function [dV, nodes, parameters, grad, it] = optimize(nodes, parameters)
 %         pause(0.001);
         
 %         disp(['it = ' num2str(it) ' -> ' num2str(nrm(grad)) ' -> ' num2str(dV)]);
+
+        if mod(it, 20) == 1
+            util.showOrbits(nodes);
+        end
     end
 end

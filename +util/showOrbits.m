@@ -2,7 +2,7 @@ function showOrbits(nodes)
     N = length(nodes);
     NN = 100;
     
-    figure;
+    clf;
     hold('on');
     
     % Sun
@@ -26,5 +26,7 @@ function showOrbits(nodes)
     end
     
     grid('on');
-    axis('equal');    
+    axis('equal');
+    
+    drawnow;
 end

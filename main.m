@@ -8,6 +8,8 @@ GM = G * M;
 global options;
 options = optimset('Display', 'off'); % hide output from fsolve
 
+figure;
+
 %% INPUT
 
 dataDir = 'data/';
@@ -21,8 +23,8 @@ filename = 'input.mat';
 %% OPTIMIZE DELTA V TOTAL
 
 initial = parameters; % store initial guesses
-[dV, nodes] = computeDeltaV(nodes, parameters);
-% [dV, nodes] = optimize(nodes, parameters); % [dV, nodes, parameters, grad, it] to debug
+% [dV, nodes] = computeDeltaV(nodes, parameters);
+[dV, nodes] = optimize(nodes, parameters); % [dV, nodes, parameters, grad, it] to debug
 
 %% OUTPUT
 
