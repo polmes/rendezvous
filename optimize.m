@@ -1,8 +1,8 @@
 function [dV, nodes, parameters, grad, it] = optimize(nodes, parameters)
     % Tolerance
     pardif = ones(size(parameters)) * 1;
-    dl = 10000000;
-    epsi = 0.0001;
+    dl = 10000;
+    epsi = 0.0002;
     
     % Ignore NaN
     nrm = @(x) norm(x(~isnan(x)));
@@ -39,7 +39,7 @@ function [dV, nodes, parameters, grad, it] = optimize(nodes, parameters)
 %         plot(parameters(1, 1), dV, ['x' colors(3, 1)]);
 %         pause(0.001);
         
-%         disp(['it = ' num2str(it) ' -> ' num2str(nrm(grad)) ' -> ' num2str(dV)]);
+        disp(['it = ' num2str(it) ' -> nrm(grad) = ' num2str(nrm(grad)) ' -> dV = ' num2str(dV / 1000) ' km/s']);
 
         if mod(it, 20) == 1
             util.showOrbits(nodes);

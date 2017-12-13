@@ -12,7 +12,7 @@ function showOrbits(nodes)
         r = nodes(i).r;
         scatter3(r(1), r(2), r(3), 'filled');
     end
-    
+        
     for i = 1:N-1
         orbit = OrbitFactory(nodes(i));
         
@@ -24,6 +24,9 @@ function showOrbits(nodes)
         
         plot3(rs(1, :), rs(2, :), rs(3, :));
     end
+    
+    nodeNames = 1:N;
+    legend(["Sun"; string(num2str(nodeNames(:)))]);
     
     grid('on');
     axis('equal');
