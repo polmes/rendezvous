@@ -21,10 +21,11 @@ filename = 'input.mat';
 %% OPTIMIZE DELTA V TOTAL
 
 initial = parameters; % store initial guesses
-% [dV, nodes] = computeDeltaV(nodes, parameters);
-[dV, nodes] = optimize(nodes, parameters); % [dV, nodes, parameters, grad, it] to debug
+% [dV, nodes, dv] = computeDeltaV(nodes, parameters);
+[dV, nodes, dv, minParameters] = optimize(nodes, parameters); % [dV, nodes, parameters, grad, it] to debug
 
 %% OUTPUT
 
 disp(['deltaV = ' num2str(dV / 1000) ' km/s']);
 util.showOrbits(nodes);
+util.showBudget(dv);
