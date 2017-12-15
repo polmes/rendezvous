@@ -1,4 +1,4 @@
-function [dV, nodes] = computeDeltaV(nodes, parameters)
+function [dV, nodes, dv] = computeDeltaV(nodes, parameters)
     N = length(nodes);
     
     for i = 1:N
