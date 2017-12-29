@@ -31,6 +31,7 @@ name = util.getName([dataDir filename]);
 
 disp(['deltaV = ' num2str(dV / 1000) ' km/s']);
 util.showOrbits(nodes);
+util.showPlanets(solarSystem);
 util.showBudget(dv);
 
 input = util.writeInput([dataDir filename], parameters);
