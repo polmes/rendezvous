@@ -15,17 +15,24 @@ dataDir = 'data/';
 database = 'solarSystem.mat';
 solarSystem = util.readDatabase([dataDir database]);
 
-filename = 'input.mat';
+filename = 'input_44.mat';
 [nodes, parameters] = util.readInput([dataDir filename], solarSystem);
 
 %% OPTIMIZE DELTA V TOTAL
 
+optimizer = 'original'; % 'none' / 'original' / 'scout' / 'ran'
 initial = parameters; % store initial guesses
-% [dV, nodes, dv] = computeDeltaV(nodes, parameters);
-[dV, nodes, dv, minParameters] = optimize(nodes, parameters); % [dV, nodes, parameters, grad, it] to debug
+[dV, nodes, dv, parameters] = optimize(nodes, parameters, optimizer);
 
 %% OUTPUT
+
+resultsDir = 'results/';
+name = util.getName([dataDir filename]);
 
 disp(['deltaV = ' num2str(dV / 1000) ' km/s']);
 util.showOrbits(nodes);
 util.showBudget(dv);
+
+input = util.writeInput([dataDir filename], parameters);
+save([resultsDir 'all_' name '_' optimizer '.mat']); % all variables
+save([resultsDir 'input_' name '_' optimizer '.mat'], 'input'); % final parameters in input format
