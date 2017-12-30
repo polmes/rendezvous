@@ -28,7 +28,7 @@ function [mindV, nodes, dv, minParameters] = originalOptimizer(nodes, parameters
                 test = parameters;
                 test(i, j) = test(i, j) + pardif(i, j);
                 
-                grad(i,j) = (computeDeltaV(nodes, test) - dV) / pardif(i,j);
+                grad(i, j) = (computeDeltaV(nodes, test) - dV) / pardif(i, j);
             end
         end
         
