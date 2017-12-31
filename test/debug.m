@@ -15,7 +15,7 @@ dataDir = 'data/';
 database = 'solarSystem.mat';
 solarSystem = util.readDatabase([dataDir database]);
 
-filename = 'input_short.mat';
+filename = 'input_56.mat';
 [nodes, parameters] = util.readInput([dataDir filename], solarSystem);
 
 %% OPTIMIZE DELTA V TOTAL

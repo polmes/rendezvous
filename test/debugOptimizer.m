@@ -1,7 +1,7 @@
 function [mindV, nodes, dv, minParameters] = debugOptimizer(nodes, parameters)
     % Tolerance
     pardif = ones(size(parameters)) * 1;
-    dl = 100000000;
+    dl = 10000000;
     epsi = 0.0005;
     k = 10;
     
@@ -11,11 +11,16 @@ function [mindV, nodes, dv, minParameters] = debugOptimizer(nodes, parameters)
     % Initial value
     dV = computeDeltaV(nodes, parameters);
 
-    figure;
+    figure(1);
     hold('on');
     xlabel('Iteration', 'Interpreter', 'latex');
     ylabel('Gradient', 'Interpreter', 'latex');
-    colors = ['b' 'k' 'r' 'g' 'y' 'c' 'm'];
+    colors = ['b' 'k' 'r' 'g' 'y' 'c' 'm' 'w'];
+    
+    figure(2);
+    hold('on');
+    xlabel('Iteration', 'Interpreter', 'latex');
+    ylabel('$$\Delta v$$ [km/s]', 'Interpreter', 'latex');
 
     % Optimal
     minParameters = parameters;
@@ -35,6 +40,8 @@ function [mindV, nodes, dv, minParameters] = debugOptimizer(nodes, parameters)
                 test(i, j) = test(i, j) + pardif(i, j);
                 
                 grad(i, j) = (computeDeltaV(nodes, test) - dV) / pardif(i, j);
+                
+                figure(1);
                 plot(it, grad(i, j), ['x' colors(i)]);
                 drawnow;
             end
@@ -60,6 +67,10 @@ function [mindV, nodes, dv, minParameters] = debugOptimizer(nodes, parameters)
         end
         
         disp(['it = ' num2str(it) ' -> nrm(grad) = ' num2str(nrm(grad)) ' -> dV = ' num2str(dV / 1000) ' km/s']);
+        
+        figure(2);
+        plot(it, dV / 1000, 'bx');
+        drawnow;
 
 %         if mod(it, 20) == 1
 %             util.showOrbits(nodes);
